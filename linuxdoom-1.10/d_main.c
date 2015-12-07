@@ -577,7 +577,7 @@ void IdentifyVersion (void)
     char *doomwaddir;
     doomwaddir = getenv("DOOMWADDIR");
     if (!doomwaddir)
-	doomwaddir = ".";
+	doomwaddir = "/usr/share/games/doom";
 
     // Commercial.
     doom2wad = malloc(strlen(doomwaddir)+1+9+1);
