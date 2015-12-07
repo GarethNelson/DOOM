@@ -32,6 +32,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #include <ctype.h>
 
@@ -225,7 +226,7 @@ extern char*	chat_macros[];
 typedef struct
 {
     char*	name;
-    int*	location;
+    uintptr_t*	location;
     long	defaultvalue;
     int		scantranslate;		// PC scan code hack
     int		untranslated;		// lousy hack
@@ -233,68 +234,68 @@ typedef struct
 
 default_t	defaults[] =
 {
-    {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&snd_SfxVolume, 8},
-    {"music_volume",&snd_MusicVolume, 8},
-    {"show_messages",&showMessages, 1},
+    {"mouse_sensitivity",(uintptr_t*)&mouseSensitivity, 5},
+    {"sfx_volume",(uintptr_t*)&snd_SfxVolume, 8},
+    {"music_volume",(uintptr_t*)&snd_MusicVolume, 8},
+    {"show_messages",(uintptr_t*)&showMessages, 1},
     
 
 #ifdef NORMALUNIX
-    {"key_right",&key_right, KEY_RIGHTARROW},
-    {"key_left",&key_left, KEY_LEFTARROW},
-    {"key_up",&key_up, KEY_UPARROW},
-    {"key_down",&key_down, KEY_DOWNARROW},
-    {"key_strafeleft",&key_strafeleft, ','},
-    {"key_straferight",&key_straferight, '.'},
+    {"key_right",(uintptr_t*)&key_right, KEY_RIGHTARROW},
+    {"key_left",(uintptr_t*)&key_left, KEY_LEFTARROW},
+    {"key_up",(uintptr_t*)&key_up, KEY_UPARROW},
+    {"key_down",(uintptr_t*)&key_down, KEY_DOWNARROW},
+    {"key_strafeleft",(uintptr_t*)&key_strafeleft, ','},
+    {"key_straferight",(uintptr_t*)&key_straferight, '.'},
 
-    {"key_fire",&key_fire, KEY_RCTRL},
-    {"key_use",&key_use, ' '},
-    {"key_strafe",&key_strafe, KEY_RALT},
-    {"key_speed",&key_speed, KEY_RSHIFT},
+    {"key_fire",(uintptr_t*)&key_fire, KEY_RCTRL},
+    {"key_use",(uintptr_t*)&key_use, ' '},
+    {"key_strafe",(uintptr_t*)&key_strafe, KEY_RALT},
+    {"key_speed",(uintptr_t*)&key_speed, KEY_RSHIFT},
 
 // UNIX hack, to be removed. 
 #ifdef SNDSERV
-    {"sndserver", &sndserver_filename, (long)"sndserver"},
-    {"mb_used", &mb_used, 2},
+    {"sndserver", (uintptr_t*)&sndserver_filename, (long)"sndserver"},
+    {"mb_used", (uintptr_t*)&mb_used, 2},
 #endif
     
 #endif
 
 #ifdef LINUX
-    {"mousedev", (int*)&mousedev, (long)"/dev/ttyS0"},
-    {"mousetype", (int*)&mousetype, (long)"microsoft"},
+    {"mousedev", (uintptr_t*)&mousedev, (long)"/dev/ttyS0"},
+    {"mousetype", (uintptr_t*)&mousetype, (long)"microsoft"},
 #endif
 
-    {"use_mouse",&usemouse, 1},
-    {"mouseb_fire",&mousebfire,0},
-    {"mouseb_strafe",&mousebstrafe,1},
-    {"mouseb_forward",&mousebforward,2},
+    {"use_mouse",(uintptr_t*)&usemouse, 1},
+    {"mouseb_fire",(uintptr_t*)&mousebfire,0},
+    {"mouseb_strafe",(uintptr_t*)&mousebstrafe,1},
+    {"mouseb_forward",(uintptr_t*)&mousebforward,2},
 
-    {"use_joystick",&usejoystick, 0},
-    {"joyb_fire",&joybfire,0},
-    {"joyb_strafe",&joybstrafe,1},
-    {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,2},
+    {"use_joystick",(uintptr_t*)&usejoystick, 0},
+    {"joyb_fire",(uintptr_t*)&joybfire,0},
+    {"joyb_strafe",(uintptr_t*)&joybstrafe,1},
+    {"joyb_use",(uintptr_t*)&joybuse,3},
+    {"joyb_speed",(uintptr_t*)&joybspeed,2},
 
-    {"screenblocks",&screenblocks, 9},
-    {"detaillevel",&detailLevel, 0},
+    {"screenblocks",(uintptr_t*)&screenblocks, 9},
+    {"detaillevel",(uintptr_t*)&detailLevel, 0},
 
-    {"snd_channels",&numChannels, 3},
+    {"snd_channels",(uintptr_t*)&numChannels, 3},
 
 
 
-    {"usegamma",&usegamma, 0},
+    {"usegamma",(uintptr_t*)&usegamma, 0},
 
-    {"chatmacro0", &chat_macros[0], (long) HUSTR_CHATMACRO0 },
-    {"chatmacro1", &chat_macros[1], (long) HUSTR_CHATMACRO1 },
-    {"chatmacro2", &chat_macros[2], (long) HUSTR_CHATMACRO2 },
-    {"chatmacro3", &chat_macros[3], (long) HUSTR_CHATMACRO3 },
-    {"chatmacro4", &chat_macros[4], (long) HUSTR_CHATMACRO4 },
-    {"chatmacro5", &chat_macros[5], (long) HUSTR_CHATMACRO5 },
-    {"chatmacro6", &chat_macros[6], (long) HUSTR_CHATMACRO6 },
-    {"chatmacro7", &chat_macros[7], (long) HUSTR_CHATMACRO7 },
-    {"chatmacro8", &chat_macros[8], (long) HUSTR_CHATMACRO8 },
-    {"chatmacro9", &chat_macros[9], (long) HUSTR_CHATMACRO9 }
+    {"chatmacro0", (uintptr_t*)&chat_macros[0], (long) HUSTR_CHATMACRO0 },
+    {"chatmacro1", (uintptr_t*)&chat_macros[1], (long) HUSTR_CHATMACRO1 },
+    {"chatmacro2", (uintptr_t*)&chat_macros[2], (long) HUSTR_CHATMACRO2 },
+    {"chatmacro3", (uintptr_t*)&chat_macros[3], (long) HUSTR_CHATMACRO3 },
+    {"chatmacro4", (uintptr_t*)&chat_macros[4], (long) HUSTR_CHATMACRO4 },
+    {"chatmacro5", (uintptr_t*)&chat_macros[5], (long) HUSTR_CHATMACRO5 },
+    {"chatmacro6", (uintptr_t*)&chat_macros[6], (long) HUSTR_CHATMACRO6 },
+    {"chatmacro7", (uintptr_t*)&chat_macros[7], (long) HUSTR_CHATMACRO7 },
+    {"chatmacro8", (uintptr_t*)&chat_macros[8], (long) HUSTR_CHATMACRO8 },
+    {"chatmacro9", (uintptr_t*)&chat_macros[9], (long) HUSTR_CHATMACRO9 }
 
 };
 
@@ -392,7 +393,7 @@ void M_LoadDefaults (void)
 			    *defaults[i].location = parm;
 			else
 			    *defaults[i].location =
-				(int) newstring;
+				(long) newstring;
 			break;
 		    }
 	    }
