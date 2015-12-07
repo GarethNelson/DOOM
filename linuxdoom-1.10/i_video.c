@@ -164,12 +164,12 @@ int xlatekey(void)
 void I_ShutdownGraphics(void)
 {
   // Detach from X server
-  if (!XShmDetach(X_display, &X_shminfo))
+/*  if (!XShmDetach(X_display, &X_shminfo))
 	    I_Error("XShmDetach() failed in I_ShutdownGraphics()");
 
   // Release shared memory.
   shmdt(X_shminfo.shmaddr);
-  shmctl(X_shminfo.shmid, IPC_RMID, 0);
+  shmctl(X_shminfo.shmid, IPC_RMID, 0);*/
 
   // Paranoia.
   image->data = NULL;
@@ -480,7 +480,7 @@ void I_FinishUpdate (void)
   	Expand4 ((unsigned *)(screens[0]), (double *) (image->data));
     }
 
-    if (doShm)
+/*    if (doShm)
     {
 
 	if (!XShmPutImage(	X_display,
@@ -502,7 +502,7 @@ void I_FinishUpdate (void)
 
     }
     else
-    {
+    {*/
 
 	// draw the image
 	XPutImage(	X_display,
@@ -516,7 +516,7 @@ void I_FinishUpdate (void)
 	// sync up with server
 	XSync(X_display, False);
 
-    }
+    //}
 
 }
 
@@ -772,8 +772,8 @@ void I_InitGraphics(void)
     X_visual = X_visualinfo.visual;
 
     // check for the MITSHM extension
-    doShm = XShmQueryExtension(X_display);
-
+    //doShm = XShmQueryExtension(X_display);
+    doShm = 0;
     // even if it's available, make sure it's a local connection
     if (doShm)
     {
@@ -792,6 +792,7 @@ void I_InitGraphics(void)
     // create the colormap
     X_cmap = XCreateColormap(X_display, RootWindow(X_display,
 						   X_screen), X_visual, AllocAll);
+    XInstallColormap(X_display, X_cmap);
 
     // setup attributes for main window
     attribmask = CWEventMask | CWColormap | CWBorderPixel;
@@ -849,7 +850,7 @@ void I_InitGraphics(void)
 		     GrabModeAsync, GrabModeAsync,
 		     X_mainWindow, None, CurrentTime);
 
-    if (doShm)
+/*    if (doShm)
     {
 
 	X_shmeventtype = XShmGetEventBase(X_display) + ShmCompletion;
@@ -893,7 +894,7 @@ void I_InitGraphics(void)
 
     }
     else
-    {
+    {*/
 	image = XCreateImage(	X_display,
     				X_visual,
     				8,
@@ -904,7 +905,7 @@ void I_InitGraphics(void)
     				8,
     				X_width );
 
-    }
+    //}
 
     if (multiply == 1)
 	screens[0] = (unsigned char *) (image->data);
